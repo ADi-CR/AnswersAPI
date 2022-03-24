@@ -245,7 +245,7 @@ namespace AnswersAPI.Models
 
                 entity.Property(e => e.UserRoleId).HasColumnName("UserRoleID");
 
-                entity.Property(e => e.UserStatuId).HasColumnName("UserStatuID");
+                entity.Property(e => e.UserStatusId).HasColumnName("UserStatusID");
 
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.Users)
@@ -259,9 +259,9 @@ namespace AnswersAPI.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKUser854768");
 
-                entity.HasOne(d => d.UserStatu)
+                entity.HasOne(d => d.UserStatus)
                     .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.UserStatuId)
+                    .HasForeignKey(d => d.UserStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKUser472287");
             });
@@ -281,12 +281,9 @@ namespace AnswersAPI.Models
 
             modelBuilder.Entity<UserStatus>(entity =>
             {
-                entity.HasKey(e => e.UserStatuId)
-                    .HasName("PK__UserStat__DE1EE8FBFD1F6B57");
-
                 entity.ToTable("UserStatus");
 
-                entity.Property(e => e.UserStatuId).HasColumnName("UserStatuID");
+                entity.Property(e => e.UserStatusId).HasColumnName("UserStatusID");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
