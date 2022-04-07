@@ -7,16 +7,14 @@ namespace AnswersAPI.Tools
 {
     public class Crypto
     {
-
         //Esta clase contiene los métodos necesarios para encriptar
         //no solo contraseñas sino cualquier dato importante
         //TODO: utilizar estas funciona para encriptar la cadena de conexión 
 
         string LlavePersonalizadaApp = "APPkajhsdkjh672716762TEMP";
-
         string LlavePersonalizadaAPI = "APIklsjdnfjkfdf90rer83722";
 
-        public string DesEncriptarPassword(string Pass, bool UsarLlaveApp = true)
+        public string DesEncriptarPassword(string Pass, bool UsarLlaveApp = false)
         {
             string R = string.Empty;
 
@@ -26,7 +24,7 @@ namespace AnswersAPI.Tools
             {
                 LlaveAUsar = LlavePersonalizadaAPI;
             }
-
+#pragma warning disable SYSLIB0021 // Type or member is obsolete
             using (TripleDESCryptoServiceProvider tripleDESCryptoService = new TripleDESCryptoServiceProvider())
             {
                 using (MD5CryptoServiceProvider hashMD5Provider = new MD5CryptoServiceProvider())
@@ -47,7 +45,7 @@ namespace AnswersAPI.Tools
 
         }
 
-        public string EncriptarPassword(string Pass, bool UsarLlaveApp = true)
+        public string EncriptarPassword(string Pass, bool UsarLlaveApp = false)
         {
             string R = string.Empty;
 

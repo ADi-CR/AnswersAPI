@@ -17,9 +17,13 @@ namespace AnswersAPI.Controllers
     {
         private readonly AnswersDBContext _context;
 
+        private Tools.Crypto MyCrypto { get; set; }
+
         public UsersController(AnswersDBContext context)
         {
             _context = context;
+
+            MyCrypto = new Tools.Crypto();
         }
 
         // GET: api/Users
@@ -41,6 +45,27 @@ namespace AnswersAPI.Controllers
             }
 
             return user;
+        }
+
+        [HttpGet("ValidateUserLogin")]
+        public async Task<ActionResult<User>> ValidateUserLogin(string pEmail, string pPassword)
+        { 
+            //se valida el usuario por el email y el password encriptado a nivel de api 
+            string ApiLevelEncriptedPassword = MyCrypto.EncriptarEnUnSentido(pPassword);
+
+            //TAREA: Hacer esta misma consulta pero usando LINQ
+
+            var user = await _context.Users.SingleOrDefaultAsync(e => e.UserName == pEmail && 
+                                                                 e.UserPassword == ApiLevelEncriptedPassword);
+
+            //si no hay respuesta en la consulta se devuelte el mensaje http Not Found
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        
         }
 
         // PUT: api/Users/5
@@ -79,6 +104,15 @@ namespace AnswersAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            //El password ya viene encriptado desde la app, por un asunto de seguridad (si alguien intercepta el request
+            //no va poder entender qué password digitó el usuario. 
+            //además de esa encriptación acá se volverá a encriptar con otra llave para que aunque se pueda copiar el 
+            //password (a nivel del app) no se pueda usar contra la base de datos. 
+
+            string ApiLevelEncriptedPassword = MyCrypto.EncriptarEnUnSentido(user.UserPassword);
+
+            user.UserPassword = ApiLevelEncriptedPassword;
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
