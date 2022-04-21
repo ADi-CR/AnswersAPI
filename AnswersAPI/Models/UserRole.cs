@@ -14,6 +14,5 @@ namespace AnswersAPI.Models
         public string UserRole1 { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
-
     }
 }

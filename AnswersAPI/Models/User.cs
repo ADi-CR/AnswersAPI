@@ -5,7 +5,6 @@ namespace AnswersAPI.Models
 {
     public partial class User
     {
-
         public User()
         {
             Answers = new HashSet<Answer>();
