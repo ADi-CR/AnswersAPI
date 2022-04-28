@@ -12,7 +12,9 @@ namespace AnswersAPI.Models
 
         public int UserRoleId { get; set; }
         public string UserRole1 { get; set; }
+        public bool IsUserSelectable { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
+
     }
 }

@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AnswersAPI.Models;
+using AnswersAPI.Attributes;
 
 namespace AnswersAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiKey]
     public class UserRolesController : ControllerBase
     {
         private readonly AnswersDBContext _context;
@@ -19,6 +21,27 @@ namespace AnswersAPI.Controllers
         {
             _context = context;
         }
+
+        // GET: api/UserRoles
+        [HttpGet("GetSelectableUserRoles")]
+        public async Task<ActionResult<IEnumerable<UserRole>>> GetSelectableUserRoles()
+        {
+            //esto es el equivalente a un select con where
+            List<UserRole> list = await _context.UserRoles.Where(u => u.IsUserSelectable == true).ToListAsync();
+
+            //List<UserRole> list = ((from i in _context.UserRoles
+            //             where i.IsUserSelectable.Equals(true)
+            //             select i) as List<UserRole>);
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+
+            return list;
+        }
+
+
 
         // GET: api/UserRoles
         [HttpGet]
